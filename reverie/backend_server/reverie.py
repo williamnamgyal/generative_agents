@@ -397,9 +397,14 @@ class ReverieServer:
           # {"persona": {"Maria Lopez": {"movement": [58, 9]}},
           #  "persona": {"Klaus Mueller": {"movement": [38, 12]}}, 
           #  "meta": {curr_time: <datetime>}}
+          
+          curr_move_path = f"{sim_folder}/movement"
+          if not os.path.exists(curr_move_path):
+          	os.makedirs(curr_move_path)
           curr_move_file = f"{sim_folder}/movement/{self.step}.json"
-          with open(curr_move_file, "w") as outfile: 
-            outfile.write(json.dumps(movements, indent=2))
+          with open(curr_move_file, "w") as outfile:
+          	outfile.write(json.dumps(movements, indent=2))
+
 
           # After this cycle, the world takes one step forward, and the 
           # current time moves by <sec_per_step> amount. 
@@ -587,7 +592,8 @@ class ReverieServer:
             whispers = [whisper.strip() for whisper in whispers]
             for whisper in whispers: 
               clean_whispers += [[agent_name, whisper]]
-
+          for persona_name, persona in self.personas.items(): 
+            persona.scratch.curr_time = self.curr_time
           load_history_via_whisper(self.personas, clean_whispers)
 
         print (ret_str)
@@ -610,55 +616,3 @@ if __name__ == '__main__':
 
   rs = ReverieServer(origin, target)
   rs.open_server()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
